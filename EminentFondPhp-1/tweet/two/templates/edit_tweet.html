@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tweetify &mdash; Edit Tweet</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f1117;
+      color: #e7e9ea;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #2f3336;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1d9bf0;
+      text-decoration: none;
+    }
+    .nav-brand i { font-size: 24px; }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8b98a5;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 7px 14px;
+      border-radius: 9999px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .back-link:hover { background: #1d1f23; color: #e7e9ea; }
+
+    .page-wrap {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px 60px;
+    }
+
+    .card {
+      background: #16181c;
+      border: 1px solid #2f3336;
+      border-radius: 20px;
+      padding: 36px 32px;
+      width: 100%;
+      max-width: 540px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .card-subtitle {
+      font-size: 14px;
+      color: #8b98a5;
+      margin-bottom: 28px;
+    }
+
+    .field { margin-bottom: 20px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #8b98a5;
+      margin-bottom: 7px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 13px 16px;
+      background: #0f1117;
+      border: 1px solid #2f3336;
+      border-radius: 10px;
+      color: #e7e9ea;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    input[type="text"]:focus,
+    textarea:focus {
+      border-color: #1d9bf0;
+      box-shadow: 0 0 0 3px rgba(29, 155, 240, 0.15);
+    }
+    input[type="text"]::placeholder,
+    textarea::placeholder { color: #3d4348; }
+
+    textarea { resize: vertical; min-height: 110px; }
+
+    .file-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 16px;
+      background: #0f1117;
+      border: 1px dashed #2f3336;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      color: #8b98a5;
+      transition: border-color 0.18s, color 0.18s;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+    .file-label:hover { border-color: #1d9bf0; color: #1d9bf0; }
+    .file-label i { font-size: 18px; }
+    input[type="file"] { display: none; }
+
+    .current-image {
+      margin-top: 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #2f3336;
+    }
+    .current-image img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .current-image-label {
+      font-size: 12px;
+      color: #8b98a5;
+      margin-bottom: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: 400;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 13px;
+      background: #1d9bf0;
+      color: #fff;
+      border: none;
+      border-radius: 9999px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.18s, transform 0.12s;
+    }
+    .btn-submit:hover { background: #1a8cd8; }
+    .btn-submit:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="{% url 'index' %}">
+    <i class="fa-brands fa-twitter"></i> Tweetify
+  </a>
+  <a href="{% url 'index' %}" class="back-link">
+    <i class="fa-solid fa-arrow-left"></i> Back to Feed
+  </a>
+</nav>
+
+<div class="page-wrap">
+  <div class="card">
+    <div class="card-title">Edit Tweet</div>
+    <div class="card-subtitle">Update your post</div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="tittle">Title</label>
+        <input type="text" id="tittle" name="tittle" value="{{ t.tittle }}" required>
+      </div>
+
+      <div class="field">
+        <label for="desc">What's happening?</label>
+        <textarea id="desc" name="desc" required>{{ t.desc }}</textarea>
+      </div>
+
+      <div class="field">
+        <label>Photo (optional)</label>
+        {% if t.imag %}
+          <p class="current-image-label">Current image:</p>
+          <div class="current-image">
+            <img src="{{ t.imag.url }}" alt="Current image">
+          </div>
+        {% endif %}
+        <label class="file-label" for="image" style="margin-top: 10px;">
+          <i class="fa-regular fa-image"></i>
+          <span id="file-name">
+            {% if t.imag %}Replace image…{% else %}Choose an image to attach{% endif %}
+          </span>
+        </label>
+        <input type="file" id="image" name="image" accept="image/*"
+               onchange="document.getElementById('file-name').textContent = this.files[0]?.name || 'Choose an image to attach'">
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <i class="fa-solid fa-floppy-disk"></i> &nbsp;Save Changes
+      </button>
+    </form>
+  </div>
+</div>
+
+</body>
+</html>

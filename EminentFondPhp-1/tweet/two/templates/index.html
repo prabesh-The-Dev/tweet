@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tweetify &mdash; Feed</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f1117;
+      color: #e7e9ea;
+      min-height: 100vh;
+    }
+
+    /* ── Navbar ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 17, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid #2f3336;
+      padding: 0 24px;
+      height: 56px;
+     display:flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1d9bf0;
+      text-decoration: none;
+    }
+    .nav-brand i { font-size: 24px; }
+
+    .nav-actions { display: flex; align-items: center; gap: 12px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 18px;
+      border-radius: 9999px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+      transition: background 0.18s, transform 0.12s;
+    }
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: #1d9bf0;
+      color: #fff;
+    }
+    .btn-primary:hover { background: #1a8cd8; }
+
+    .btn-danger {
+      background: transparent;
+      color: #f4212e;
+      border: 1px solid #2f3336;
+      padding: 6px 14px;
+      font-size: 13px;
+    }
+    .btn-danger:hover { background: rgba(244,33,46,0.1); }
+
+    /* ── Layout ── */
+    .page-wrap {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
+
+    .feed-header {
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 0 20px;
+      border-bottom: 1px solid #2f3336;
+      margin-bottom: 8px;
+      color: #e7e9ea;
+    }
+
+    /* ── Tweet card ── */
+    .tweet-card {
+      background: #16181c;
+      border: 1px solid #2f3336;
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 16px;
+      transition: background 0.18s, border-color 0.18s, transform 0.14s;
+    }
+    .tweet-card:hover {
+      background: #1d1f23;
+      border-color: #404447;
+      transform: translateY(-1px);
+    }
+
+    .tweet-card h2 {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #e7e9ea;
+    }
+
+    .tweet-card p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: #8b98a5;
+      margin-bottom: 14px;
+    }
+
+    .tweet-card img {
+      width: 100%;
+      max-height: 340px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      border: 1px solid #2f3336;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 10px;
+      border-top: 1px solid #2f3336;
+    }
+
+    /* ── Empty state ── */
+    .empty-state {
+      text-align: center;
+      padding: 64px 24px;
+      color: #8b98a5;
+    }
+    .empty-state i {
+      font-size: 48px;
+      color: #2f3336;
+      margin-bottom: 18px;
+      display: block;
+    }
+    .empty-state p { font-size: 15px; margin-bottom: 20px; }
+    .empty-state a { color: #1d9bf0; text-decoration: none; font-weight: 600; }
+    .empty-state a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="{% url 'index' %}">
+    <i class="fa-brands fa-twitter"></i> Tweetify
+  </a>
+  <div class="nav-actions">
+    <a href="{% url 'add_tweet' %}" class="btn btn-primary">
+      <i class="fa-solid fa-plus"></i> New Tweet
+    </a>
+  </div>
+</nav>
+
+<div class="page-wrap">
+  <div class="feed-header">Your Feed</div>
+
+  {% if tweets %}
+    {% for t in tweets %}
+      <div class="tweet-card">
+        <h2>{{ t.tittle }}</h2>
+        <p>{{ t.desc }}</p>
+        {% if t.imag %}
+          <img src="{{ t.imag.url }}" alt="{{ t.tittle }}">
+        {% endif %}
+        <div class="card-footer">
+          <form method="POST" action="{% url 'delete_tweet' t.id %}"
+            onsubmit="return confirm('Delete this tweet?');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger">
+              <i class="fa-solid fa-trash-can"></i> Delete
+          </button>
+          </form>
+
+          <a href="{% url 'edit_tweet' t.id %}" class="btn btn-primary" style="margin-left:8px;">
+            <i class="fa-solid fa-pen"></i> Edit
+          </a>
+        </div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="empty-state">
+      <i class="fa-regular fa-comment-dots"></i>
+      <p>No tweets yet. Be the first to share something!</p>
+      <a href="{% url 'add_tweet' %}" class="btn btn-primary">
+        <i class="fa-solid fa-plus"></i> Add a Tweet
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+</body>
+</html>
