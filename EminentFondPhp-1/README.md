@@ -149,6 +149,15 @@ Django = "^5.0"
 > ```
 
 ---
+## Screenshots
+
+### Tweet Feed
+
+![Tweetify Home Feed](screenshots/home-feed.png)
+
+### Create a Tweet
+
+![Create Tweet Form](screenshots/create-tweet.png)
 
 ## License
 
