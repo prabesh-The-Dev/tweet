@@ -87,8 +87,8 @@ media/
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd <repo-folder>
+   git clone https://github.com/prabesh-The-Dev/tweet.git
+cd tweet
    ```
 
 2. **Install dependencies**
